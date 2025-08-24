@@ -34,6 +34,7 @@ jobs:
       - name: Deploy to gh-pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
+          token: ${{ secrets.GGPLOT2_SNIPPETS_PAT }}
           branch: gh-pages
           folder: snippets/_book
 
