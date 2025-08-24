@@ -1,0 +1,22 @@
+project:
+  type: book
+
+book:
+  title: "ggplot2 snippets"
+  author: "Vedo A."
+  date: "8/1/2025"
+  chapters:
+    - index.qmd
+    - intro.qmd
+    - basic.qmd
+    - ggiraph.qmd
+    - references.qmd
+
+bibliography: references.bib
+
+format:
+  html:
+    theme: cosmo
+
+filters:
+  - add-date.lua

@@ -1,0 +1,5 @@
+# Introduction
+
+This is a book created from markdown and executable code which helps me to easier remember some nice plotting snippets using the ggplot2 library and its extensions.
+
+Official ressource by ggplot2 creator @ggplot2.

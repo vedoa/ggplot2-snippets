@@ -1,0 +1,28 @@
+# Interactivity with ggiraph
+
+The package [ggiraph](https://davidgohel.github.io/ggiraph/index.html) (@ggiraph) makes ggplot graphics interactive.
+
+Example from [here](https://davidgohel.github.io/ggiraph/reference/girafe.html).
+
+Hovering over the point shows the names of the cars.
+
+```{r from-ggiraph}
+library(ggplot2)
+library(ggiraph)
+
+dataset <- mtcars
+dataset$carname <- row.names(mtcars)
+
+gg <- ggplot(
+  data = dataset,
+  mapping = aes(
+    x = wt, y = qsec, color = disp,
+    tooltip = carname, data_id = carname
+  )
+) +
+  geom_point_interactive()
+
+girafe(ggobj = gg)
+```
+
+Don't forget to call the girafe function otherwise it will be a plain ggplot image and not an interactive plot.

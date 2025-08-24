@@ -1,0 +1,40 @@
+name: Render and Deploy Snippets on Github Pages
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch: # allows manual triggering from the GitHub UI
+
+jobs:
+  render-and-deploy:
+    runs-on: ubuntu-latest
+
+    container:
+      image: rocker/verse:4.4.3
+
+    defaults:
+      run:
+        working-directory: snippets
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Install additional packages 
+        run: Rscript setup.R
+
+      - name: Render Quarto book
+        run: quarto render && ls -a
+
+      - name: Install rsync (needed for next step)
+        run: |
+          apt-get update && apt-get install -y rsync
+
+      - name: Deploy to gh-pages
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages
+          folder: snippets/_book
+
+

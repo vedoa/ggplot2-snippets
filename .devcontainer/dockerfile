@@ -1,0 +1,3 @@
+FROM rocker/verse:4.4.3
+
+RUN R --no-init-file -e 'install.packages("languageserver")'

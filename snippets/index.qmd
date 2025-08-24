@@ -1,0 +1,3 @@
+# Preface {.unnumbered}
+
+This is a Quarto book about code snippets in ggplot2 which i find useful .

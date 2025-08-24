@@ -1,0 +1,21 @@
+# Basic ggplot2
+
+Providing only data will results in a empty plot:
+
+```{r only-data}
+library(ggplot2)
+ggplot(data = mtcars)
+```
+
+so add an aesthetic. The plot will still be empty since no geom is added.
+
+```{r simple-aes}
+ggplot(data = mtcars, mapping = aes(x = mpg, y = disp))
+```
+
+Add a geom to add a layer.
+
+```{r simple-geom}
+ggplot(data = mtcars, mapping = aes(x = mpg, y = disp)) + 
+geom_point()
+```

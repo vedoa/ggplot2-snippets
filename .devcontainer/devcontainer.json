@@ -1,0 +1,14 @@
+{
+	"build": {
+		"dockerfile": "dockerfile"
+	},
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"REditorSupport.r", //R
+				"streetsidesoftware.code-spell-checker", //code spell checking
+				"quarto.quarto" //quarto
+			]
+		}
+	}
+}
