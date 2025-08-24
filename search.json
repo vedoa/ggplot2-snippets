@@ -1,0 +1,52 @@
+[
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "ggplot2 snippets",
+    "section": "",
+    "text": "Preface\nThis is a Quarto book about code snippets in ggplot2 which i find useful .",
+    "crumbs": [
+      "Preface"
+    ]
+  },
+  {
+    "objectID": "intro.html",
+    "href": "intro.html",
+    "title": "1  Introduction",
+    "section": "",
+    "text": "This is a book created from markdown and executable code which helps me to easier remember some nice plotting snippets using the ggplot2 library and its extensions.\nOfficial ressource by ggplot2 creator Wickham (2016).\n\n\n\n\nWickham, Hadley. 2016. Ggplot2: Elegant Graphics for Data Analysis. Springer-Verlag New York. https://ggplot2.tidyverse.org.",
+    "crumbs": [
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Introduction</span>"
+    ]
+  },
+  {
+    "objectID": "basic.html",
+    "href": "basic.html",
+    "title": "2  Basic ggplot2",
+    "section": "",
+    "text": "Providing only data will results in a empty plot:\n\nlibrary(ggplot2)\nggplot(data = mtcars)\n\n\n\n\n\n\n\n\nso add an aesthetic. The plot will still be empty since no geom is added.\n\nggplot(data = mtcars, mapping = aes(x = mpg, y = disp))\n\n\n\n\n\n\n\n\nAdd a geom to add a layer.\n\nggplot(data = mtcars, mapping = aes(x = mpg, y = disp)) + \ngeom_point()",
+    "crumbs": [
+      "<span class='chapter-number'>2</span>  <span class='chapter-title'>Basic ggplot2</span>"
+    ]
+  },
+  {
+    "objectID": "ggiraph.html",
+    "href": "ggiraph.html",
+    "title": "3  Interactivity with ggiraph",
+    "section": "",
+    "text": "The package ggiraph (Gohel and Skintzos (2025)) makes ggplot graphics interactive.\nExample from here.\nHovering over the point shows the names of the cars.\n\nlibrary(ggplot2)\nlibrary(ggiraph)\n\ndataset &lt;- mtcars\ndataset$carname &lt;- row.names(mtcars)\n\ngg &lt;- ggplot(\n  data = dataset,\n  mapping = aes(\n    x = wt, y = qsec, color = disp,\n    tooltip = carname, data_id = carname\n  )\n) +\n  geom_point_interactive()\n\ngirafe(ggobj = gg)\n\n\n\n\n\nDon’t forget to call the girafe function otherwise it will be a plain ggplot image and not an interactive plot.\n\n\n\n\nGohel, David, and Panagiotis Skintzos. 2025. Ggiraph: Make ’Ggplot2’ Graphics Interactive. https://davidgohel.github.io/ggiraph/.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Interactivity with ggiraph</span>"
+    ]
+  },
+  {
+    "objectID": "references.html",
+    "href": "references.html",
+    "title": "References",
+    "section": "",
+    "text": "Gohel, David, and Panagiotis Skintzos. 2025. Ggiraph: Make ’Ggplot2’\nGraphics Interactive. https://davidgohel.github.io/ggiraph/.\n\n\nWickham, Hadley. 2016. Ggplot2: Elegant Graphics for Data\nAnalysis. Springer-Verlag New York. https://ggplot2.tidyverse.org.",
+    "crumbs": [
+      "References"
+    ]
+  }
+]
