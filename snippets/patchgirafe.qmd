@@ -1,0 +1,62 @@
+# Combining interactivity with multiple ggplots
+
+Combining the patchwork and ggiraph packages makes a nice interactive display of data. 
+
+The austria_region.geojson was downloaded from [simplemaps](https://simplemaps.com/gis/country/at) @at_geojson .
+
+```{r austria}
+# Load required libraries
+library(sf)
+library(ggplot2)
+library(ggiraph)
+library(patchwork)
+
+# Load Austria GeoJSON from SimpleMaps (assumed downloaded locally)
+austria_map <- st_read("data/austria_regions.geojson")
+
+# Mock population data for each region
+population_data <- data.frame(
+    region = c(
+        "Burgenland", "Kärnten", "Niederösterreich", "Oberösterreich", "Salzburg",
+        "Steiermark", "Tirol", "Vorarlberg", "Wien"
+    ),
+    population = c(294000, 560000, 1680000, 1490000, 560000, 1240000, 760000, 400000, 1900000)
+)
+
+# Merge population data with spatial data
+austria_map <- merge(austria_map, population_data, by.x = "name", by.y = "region")
+
+# Add a shared data_id for interactivity
+gg1 <- ggplot(austria_map) +
+  geom_sf_interactive(aes(
+    fill = population,
+    tooltip = paste(name, "Population:", population),
+    data_id = name  # shared ID
+  )) +
+  scale_fill_gradient(low = "red", high = "green")
+
+gg2 <- ggplot(austria_map, aes(x = reorder(name, population), y = population, fill = population)) +
+  geom_bar_interactive(
+    stat = "identity",
+    aes(tooltip = paste(name, "Population:", population), data_id = name)  # same ID
+  ) +
+  scale_fill_gradient(low = "red", high = "green") + 
+  labs(
+    x = "Region",
+    y = "Population",
+    fill = "Population"
+  ) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+# Combine plots
+gg <- (gg1 / gg2) + plot_annotation(title = "Austria Regions - Interactive Population Overview")
+
+# Wrap with girafe to enable interactivity
+girafe(
+  ggobj = gg,
+  options = list(
+    opts_hover(css = "fill:blue;stroke:blue;cursor:pointer;")
+  )
+)
+
+```

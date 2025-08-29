@@ -1,1 +1,1 @@
-install.packages(c("ggiraph"))
+install.packages(c("ggiraph", "patchwork", "sf"))

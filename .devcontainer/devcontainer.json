@@ -2,6 +2,8 @@
 	"build": {
 		"dockerfile": "dockerfile"
 	},
+	"workspaceFolder": "/workspaces/ggplot2-snippets/snippets",
+ 	"workspaceMount": "source=${localWorkspaceFolder},target=/workspaces/ggplot2-snippets,type=bind",
 	"customizations": {
 		"vscode": {
 			"extensions": [

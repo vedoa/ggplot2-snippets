@@ -9,7 +9,9 @@ book:
     - index.qmd
     - intro.qmd
     - basic.qmd
+    - patchwork.qmd
     - ggiraph.qmd
+    - patchgirafe.qmd
     - references.qmd
 
 bibliography: references.bib

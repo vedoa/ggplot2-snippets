@@ -21,15 +21,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v5
 
-      - name: Install additional packages 
+      - name: Install apt dependencies
+        run: cd .. && .devcontainer/apt-dependencies.sh
+
+      - name: Install additional R packages 
         run: Rscript setup.R
 
-      - name: Render Quarto book
-        run: quarto render && ls -a
-
-      - name: Install rsync (needed for next step)
-        run: |
-          apt-get update && apt-get install -y rsync
+      - name: Render Quarto book and list content
+        run: quarto render && cd _book && ls -a
 
       - name: Deploy to gh-pages
         uses: JamesIves/github-pages-deploy-action@v4

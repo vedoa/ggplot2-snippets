@@ -19,3 +19,10 @@ Add a geom to add a layer.
 ggplot(data = mtcars, mapping = aes(x = mpg, y = disp)) + 
 geom_point()
 ```
+
+Add colors based on a variable
+
+```{r color-aes}
+ggplot(data = mtcars, mapping = aes(x = mpg, y = disp, colour = as.factor(gear))) + 
+geom_point()
+```
