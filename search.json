@@ -24,19 +24,39 @@
     "href": "basic.html",
     "title": "2  Basic ggplot2",
     "section": "",
-    "text": "Providing only data will results in a empty plot:\n\nlibrary(ggplot2)\nggplot(data = mtcars)\n\n\n\n\n\n\n\n\nso add an aesthetic. The plot will still be empty since no geom is added.\n\nggplot(data = mtcars, mapping = aes(x = mpg, y = disp))\n\n\n\n\n\n\n\n\nAdd a geom to add a layer.\n\nggplot(data = mtcars, mapping = aes(x = mpg, y = disp)) + \ngeom_point()",
+    "text": "Providing only data will results in a empty plot:\n\nlibrary(ggplot2)\nggplot(data = mtcars)\n\n\n\n\n\n\n\n\nso add an aesthetic. The plot will still be empty since no geom is added.\n\nggplot(data = mtcars, mapping = aes(x = mpg, y = disp))\n\n\n\n\n\n\n\n\nAdd a geom to add a layer.\n\nggplot(data = mtcars, mapping = aes(x = mpg, y = disp)) + \ngeom_point()\n\n\n\n\n\n\n\n\nAdd colors based on a variable\n\nggplot(data = mtcars, mapping = aes(x = mpg, y = disp, colour = as.factor(gear))) + \ngeom_point()",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Basic ggplot2</span>"
     ]
   },
   {
+    "objectID": "patchwork.html",
+    "href": "patchwork.html",
+    "title": "3  Multiple ggplots with patchwork",
+    "section": "",
+    "text": "The package patchwork (Pedersen (2025)) makes combining ggplots possible.\nExample from here.\n\nlibrary(ggplot2)\np1 &lt;- ggplot(mtcars) + \n  geom_point(aes(mpg, disp)) + \n  ggtitle('Plot 1')\n\np2 &lt;- ggplot(mtcars) + \n  geom_boxplot(aes(gear, disp, group = gear)) + \n  ggtitle('Plot 2')\n\np3 &lt;- ggplot(mtcars) + \n  geom_point(aes(hp, wt, colour = mpg)) + \n  ggtitle('Plot 3')\n\np4 &lt;- ggplot(mtcars) + \n  geom_bar(aes(gear)) + \n  facet_wrap(~cyl) + \n  ggtitle('Plot 4')\n\nlibrary(patchwork)\n\nPlots next to each other\n\np1 + p2\n\n\n\n\n\n\n\n\nPlots under each other\n\np1 /p2\n\n\n\n\n\n\n\n\nAll at once\n\np1 + p2 + p3 + p4\n\n\n\n\n\n\n\n\n\n\n\n\nPedersen, Thomas Lin. 2025. Patchwork: The Composer of Plots. https://patchwork.data-imaginist.com.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Multiple ggplots with patchwork</span>"
+    ]
+  },
+  {
     "objectID": "ggiraph.html",
     "href": "ggiraph.html",
-    "title": "3  Interactivity with ggiraph",
+    "title": "4  Interactivity with ggiraph",
     "section": "",
     "text": "The package ggiraph (Gohel and Skintzos (2025)) makes ggplot graphics interactive.\nExample from here.\nHovering over the point shows the names of the cars.\n\nlibrary(ggplot2)\nlibrary(ggiraph)\n\ndataset &lt;- mtcars\ndataset$carname &lt;- row.names(mtcars)\n\ngg &lt;- ggplot(\n  data = dataset,\n  mapping = aes(\n    x = wt, y = qsec, color = disp,\n    tooltip = carname, data_id = carname\n  )\n) +\n  geom_point_interactive()\n\ngirafe(ggobj = gg)\n\n\n\n\n\nDon’t forget to call the girafe function otherwise it will be a plain ggplot image and not an interactive plot.\n\n\n\n\nGohel, David, and Panagiotis Skintzos. 2025. Ggiraph: Make ’Ggplot2’ Graphics Interactive. https://davidgohel.github.io/ggiraph/.",
     "crumbs": [
-      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Interactivity with ggiraph</span>"
+      "<span class='chapter-number'>4</span>  <span class='chapter-title'>Interactivity with ggiraph</span>"
+    ]
+  },
+  {
+    "objectID": "patchgirafe.html",
+    "href": "patchgirafe.html",
+    "title": "5  Combining interactivity with multiple ggplots",
+    "section": "",
+    "text": "Combining the patchwork and ggiraph packages makes a nice interactive display of data.\nThe austria_region.geojson was downloaded from simplemaps SimpleMaps (2025) .\n\n# Load required libraries\nlibrary(sf)\n\nLinking to GEOS 3.12.1, GDAL 3.8.4, PROJ 9.4.0; sf_use_s2() is TRUE\n\nlibrary(ggplot2)\nlibrary(ggiraph)\nlibrary(patchwork)\n\n# Load Austria GeoJSON from SimpleMaps (assumed downloaded locally)\naustria_map &lt;- st_read(\"data/austria_regions.geojson\")\n\nReading layer `austria_regions' from data source \n  `/workspace/snippets/data/austria_regions.geojson' using driver `GeoJSON'\nSimple feature collection with 9 features and 3 fields\nGeometry type: MULTIPOLYGON\nDimension:     XY\nBounding box:  xmin: 9.521155 ymin: 46.37864 xmax: 17.14834 ymax: 49.00977\nGeodetic CRS:  WGS 84\n\n# Mock population data for each region\npopulation_data &lt;- data.frame(\n    region = c(\n        \"Burgenland\", \"Kärnten\", \"Niederösterreich\", \"Oberösterreich\", \"Salzburg\",\n        \"Steiermark\", \"Tirol\", \"Vorarlberg\", \"Wien\"\n    ),\n    population = c(294000, 560000, 1680000, 1490000, 560000, 1240000, 760000, 400000, 1900000)\n)\n\n# Merge population data with spatial data\naustria_map &lt;- merge(austria_map, population_data, by.x = \"name\", by.y = \"region\")\n\n# Add a shared data_id for interactivity\ngg1 &lt;- ggplot(austria_map) +\n  geom_sf_interactive(aes(\n    fill = population,\n    tooltip = paste(name, \"Population:\", population),\n    data_id = name  # shared ID\n  )) +\n  scale_fill_gradient(low = \"red\", high = \"green\")\n\ngg2 &lt;- ggplot(austria_map, aes(x = reorder(name, population), y = population, fill = population)) +\n  geom_bar_interactive(\n    stat = \"identity\",\n    aes(tooltip = paste(name, \"Population:\", population), data_id = name)  # same ID\n  ) +\n  scale_fill_gradient(low = \"red\", high = \"green\") + \n  labs(\n    x = \"Region\",\n    y = \"Population\",\n    fill = \"Population\"\n  ) +\n  theme(axis.text.x = element_text(angle = 45, hjust = 1))\n\n# Combine plots\ngg &lt;- (gg1 / gg2) + plot_annotation(title = \"Austria Regions - Interactive Population Overview\")\n\n# Wrap with girafe to enable interactivity\ngirafe(\n  ggobj = gg,\n  options = list(\n    opts_hover(css = \"fill:blue;stroke:blue;cursor:pointer;\")\n  )\n)\n\n\n\n\n\n\n\n\n\nSimpleMaps. 2025. “Austria Regions GeoJSON.” https://simplemaps.com/gis/country/at.",
+    "crumbs": [
+      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Combining interactivity with multiple ggplots</span>"
     ]
   },
   {
@@ -44,7 +64,7 @@
     "href": "references.html",
     "title": "References",
     "section": "",
-    "text": "Gohel, David, and Panagiotis Skintzos. 2025. Ggiraph: Make ’Ggplot2’\nGraphics Interactive. https://davidgohel.github.io/ggiraph/.\n\n\nWickham, Hadley. 2016. Ggplot2: Elegant Graphics for Data\nAnalysis. Springer-Verlag New York. https://ggplot2.tidyverse.org.",
+    "text": "Gohel, David, and Panagiotis Skintzos. 2025. Ggiraph: Make ’Ggplot2’\nGraphics Interactive. https://davidgohel.github.io/ggiraph/.\n\n\nPedersen, Thomas Lin. 2025. Patchwork: The Composer of Plots.\nhttps://patchwork.data-imaginist.com.\n\n\nSimpleMaps. 2025. “Austria Regions GeoJSON.” https://simplemaps.com/gis/country/at.\n\n\nWickham, Hadley. 2016. Ggplot2: Elegant Graphics for Data\nAnalysis. Springer-Verlag New York. https://ggplot2.tidyverse.org.",
     "crumbs": [
       "References"
     ]
